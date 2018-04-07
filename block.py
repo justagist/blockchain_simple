@@ -26,9 +26,12 @@ class BlockParams():
     def __str__(self):
         return str(self.index) + self.previous_hash + str(self.timestamp) + self.data
 
+    def __eq__(self, other):
+        return self.index == other.index and self.previous_hash == other.previous_hash and self.timestamp == other.timestamp and self.data == other.data
+
     @classmethod
-    # ----- The hardcoded parameters for the genesis block
-    def genesis_params(cls):
+    def get_genesis_params(cls):
+        # ----- The hardcoded parameters for the genesis block
         return cls(GENESIS_INDEX, GENESIS_PREVIOUS_HASH, GENESIS_TIMESTAMP, GENESIS_DATA)
 
 
@@ -42,9 +45,10 @@ class Block:
         self.previous_hash = params.previous_hash
         self.timestamp = params.timestamp
         self.data = params.data
-        self.hash = self._calc_hash()
+        self.hash = self.hashcode
 
-    def params(self):
+    @property
+    def parameters(self):
         return BlockParams(
             self.index,
             self.previous_hash,
@@ -54,11 +58,12 @@ class Block:
 
     @classmethod
     def genesis_block(cls):
-        params = BlockParams.genesis_params()
+        params = BlockParams.get_genesis_params()
         return cls(params)
 
-    def _calc_hash(self):
-        return hashlib.sha256(str(self.params()).encode()).hexdigest()
+    @property
+    def hashcode(self):
+        return hashlib.sha256(str(self.parameters).encode()).hexdigest()
 
 
     def has_valid_index(self, previous_block):
@@ -68,4 +73,4 @@ class Block:
         return self.previous_hash == previous_block.hash
 
     def has_valid_hash(self):
-        return self._calc_hash() == self.hash
+        return self.hashcode == self.hash
