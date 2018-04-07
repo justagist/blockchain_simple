@@ -1,12 +1,13 @@
 import datetime as date
 import hashlib
 
-
 # ====== Params for the Genesis block ========
-GENESIS_INDEX = 0
-GENESIS_PREVIOUS_HASH = '0'
-GENESIS_TIMESTAMP = 1495851743
-GENESIS_DATA = 'There was no one before me!'
+genesis_params = {
+'GENESIS_INDEX':0,
+'GENESIS_PREVIOUS_HASH':'0',
+'GENESIS_TIMESTAMP':1495851743,
+'GENESIS_DATA':'There was no one before me!'
+}
 # ============================================
 
 class BlockParams():
@@ -24,15 +25,23 @@ class BlockParams():
         self.data = data
 
     def __str__(self):
+        '''
+            Redifine str function for BlockParams objects
+    
+        '''
         return str(self.index) + self.previous_hash + str(self.timestamp) + self.data
 
     def __eq__(self, other):
+        '''
+            Redifine equality function for BlockParams objects
+            
+        '''
         return self.index == other.index and self.previous_hash == other.previous_hash and self.timestamp == other.timestamp and self.data == other.data
 
     @classmethod
     def get_genesis_params(cls):
         # ----- The hardcoded parameters for the genesis block
-        return cls(GENESIS_INDEX, GENESIS_PREVIOUS_HASH, GENESIS_TIMESTAMP, GENESIS_DATA)
+        return cls(genesis_params['GENESIS_INDEX'], genesis_params['GENESIS_PREVIOUS_HASH'], genesis_params['GENESIS_TIMESTAMP'], genesis_params['GENESIS_DATA'])
 
 
 class Block:
